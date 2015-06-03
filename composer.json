@@ -1,0 +1,12 @@
+{
+    "name": "boomcms/boom-installer",
+    "description": "BoomCMS installer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rob Taylor",
+            "email": "rob@uxblondon.com"
+        }
+    ],
+    "require": {}
+}
