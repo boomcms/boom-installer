@@ -21,9 +21,13 @@ class ServiceProvider extends BaseServiceProvider
     {
         $installer = new Installer();
 
-        if ( ! $installer->isInstalled()) {
+        if (php_sapi_name() !== 'cli' && ! $installer->isInstalled()) {
             require __DIR__ . '/../../install.php';
             exit;
         }
+
+        $this->publishes([
+          __DIR__.'/../../../public' => public_path('vendor/boomcms/boom-installer'),
+        ], 'boomcms');
     }
 }
