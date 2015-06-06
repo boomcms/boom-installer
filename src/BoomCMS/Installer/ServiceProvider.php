@@ -19,10 +19,11 @@ class ServiceProvider extends BaseServiceProvider
 	 */
     public function register()
     {
-        $this->loadViewsFrom(__DIR__ . '/../../views/boom/installer', 'boom.installer');
+        $installer = new Installer();
 
-        $this->app->singleton('boomcms.installer', function ($app) {
-            return new Installer();
-        });
+        if ( ! $installer->isInstalled()) {
+            require __DIR__ . '/../../install.php';
+            exit;
+        }
     }
 }
