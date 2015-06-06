@@ -5,9 +5,12 @@ namespace BoomCMS\Installer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Bus\DispatchesCommands;
 
 class Installer
 {
+    use DispatchesCommands;
+
     protected $installFileName = 'boomcms.installed';
 
     public function isInstalled()
@@ -20,7 +23,7 @@ class Installer
         Storage::disk('local')->put($this->installFileName);
     }
 
-    public function install(array $config)
+    public function installDatabase(array $config)
     {
 
         Config::set('database.connections.mysql.host', $config['db_host']);
@@ -29,14 +32,12 @@ class Installer
         Config::set('database.connections.mysql.password', $config['db_password']);
 
         if (DB::connection()->getDatabaseName()) {
-            $dbenv = "DB_HOST={$config['db_host']}\n"
-                . "DB_DATABASE={$config['db_database']}\n"
+            $dbenv = "\nDB_HOST={$config['db_host']}\n"
+                . "DB_DATABASE={$config['db_name']}\n"
                 . "DB_PASSWORD={$config['db_password']}\n"
                 . "DB_USERNAME={$config['db_username']}\n";
 
-            file_put_contents(__DIR__ . '/../../../../.env', $dbenv, FILE_APPEND);
-        } else {
-
+            file_put_contents(__DIR__ . '/../../../../../../.env', $dbenv, FILE_APPEND);
         }
     }
 }

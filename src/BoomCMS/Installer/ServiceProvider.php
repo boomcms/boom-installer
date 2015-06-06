@@ -11,7 +11,13 @@ class ServiceProvider extends BaseServiceProvider
 	 *
 	 * @return void
 	 */
-    public function boot() {}
+    public function boot()
+    {
+        // On HTTP Post request check for install data in $_POST and complete install if required.
+
+        // $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$config['user_name'], $config['user_email'], []]);
+        // $installer->install($_POST);
+    }
 
     /**
 	 *
@@ -23,7 +29,6 @@ class ServiceProvider extends BaseServiceProvider
 
         if (php_sapi_name() !== 'cli' && ! $installer->isInstalled()) {
             require __DIR__ . '/../../install.php';
-            exit;
         }
 
         $this->publishes([

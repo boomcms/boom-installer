@@ -2,6 +2,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     require __DIR__ . '/views/boomcms/installer/install.php';
+    exit;
 } else {
-    $installer->install($_POST);
+    $install->installDatabase();
 }
