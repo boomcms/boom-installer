@@ -2,6 +2,7 @@
 
 namespace BoomCMS\Installer;
 
+use BoomCMS\COre\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -12,7 +13,7 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function boot(Request $request)
+    public function boot(Request $request, Auth\Auth $auth)
     {
         // On HTTP Post request check for install data in $_POST and complete install if required.
 
@@ -21,8 +22,11 @@ class ServiceProvider extends BaseServiceProvider
         if ( ! $installer->isInstalled()) {
             $this->dispatch('Illuminate\Database\Console\Migrations\InstallCommand');
             $this->dispatch('Illuminate\Database\Console\Migrations\MigrateCommand');
-            $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$request->input('user_name'), $request->input('user_email'), []]);
-            $this->dispatch('BoomCMS\Core\Commands\CreatePage');
+
+            $person = $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$request->input('user_name'), $request->input('user_email'), []]);
+            $auth->login($person);
+
+            $this->dispatch('BoomCMS\Core\Commands\CreatePage', $this->app['boomcms.page.provider'], $auth);
             $installer->markInstalled();
         }
     }
