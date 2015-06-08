@@ -13,6 +13,17 @@ class Installer
 
     protected $installFileName = 'boomcms.installed';
 
+    public function databaseNeedsInstall()
+    {
+        try {
+            $dbname = DB::connection()->getDatabaseName();
+        } catch (\PDOException $e) {
+            return true;
+        }
+
+        return $dbname ? false : true;
+    }
+
     public function isInstalled()
     {
         return Storage::disk('local')->exists($this->installFileName);

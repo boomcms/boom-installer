@@ -1,6 +1,7 @@
 <?php
 
 use BoomCMS\Installer\Installer;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class InstallerTest extends PHPUnit_Framework_TestCase
@@ -48,5 +49,38 @@ class InstallerTest extends PHPUnit_Framework_TestCase
             ->with('boomcms.installed');
 
         $this->installer->markInstalled();
+    }
+
+    public function testDatabaseNeedsInstallTrueWithNoConnectionDetails()
+    {
+        DB::shouldReceive('connection')
+            ->once()
+            ->andThrow('PDOException');
+
+        $this->assertTrue($this->installer->databaseNeedsInstall());
+    }
+
+    public function testDatabaseNeedsInstallTrueWithNoDBName()
+    {
+        DB::shouldReceive('connection')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('getDatabaseName')
+            ->once()
+            ->andReturn(null);
+
+        $this->assertTrue($this->installer->databaseNeedsInstall());
+    }
+
+    public function testDatabaseNeedsInstallFalse()
+    {
+        DB::shouldReceive('connection')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('getDatabaseName')
+            ->once()
+            ->andReturn('a_database_name');
+
+        $this->assertFalse($this->installer->databaseNeedsInstall());
     }
 }
