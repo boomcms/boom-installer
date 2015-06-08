@@ -13,6 +13,10 @@ class Installer
 
     protected $installFileName = 'boomcms.installed';
 
+    /**
+     *
+     * @return boolean
+     */
     public function databaseNeedsInstall()
     {
         try {
@@ -24,6 +28,10 @@ class Installer
         return $dbname ? false : true;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isInstalled()
     {
         return Storage::disk('local')->exists($this->installFileName);
@@ -32,6 +40,8 @@ class Installer
     public function markInstalled()
     {
         Storage::disk('local')->put($this->installFileName);
+
+        return $this;
     }
 
     public function installDatabase(array $config)
