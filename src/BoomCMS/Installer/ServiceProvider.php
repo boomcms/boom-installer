@@ -15,8 +15,6 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot(Request $request, Auth\Auth $auth)
     {
-        // On HTTP Post request check for install data in $_POST and complete install if required.
-
         $installer = new Installer();
 
         if ( ! $installer->isInstalled()) {
@@ -26,7 +24,8 @@ class ServiceProvider extends BaseServiceProvider
             $person = $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$request->input('user_name'), $request->input('user_email'), []]);
             $auth->login($person);
 
-            $this->dispatch('BoomCMS\Core\Commands\CreatePage', $this->app['boomcms.page.provider'], $auth);
+            $page = $this->dispatch('BoomCMS\Core\Commands\CreatePage', $this->app['boomcms.page.provider'], $auth);
+            $this->dispatch('BoomCMS\Core\Commands\CreatePagePrimaryUri', $this->app['boomcms.page.provider'], $page, '', '');
             $installer->markInstalled();
         }
     }
