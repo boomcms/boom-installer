@@ -27,16 +27,14 @@ class ServiceProvider extends BaseServiceProvider
                 $this->app['migration.repository']->createRepository();
             }
 
-            $this->app['migrator']->run(database_path('/migrations'));
+            $this->app['migrator']->run(base_path('/vendor/boomcms/boom-core/src/database/migrations'));
             $installer->saveSiteDetails($request->input('site_name'), $request->input('site_email'));
 
-            $person = $this->dispatch(new CreatePersonCommand(
-                $request->input('user_name'),
-                $request->input('user_email'),
-                [],
-                $auth,
-                $this->app['boomcms.person.provider'],
-                $this->app['boomcms.group.provider']
+            $person = $this->dispatch(new CreatePersonCommand([
+                    'name' => $request->input('user_name'),
+                    'email' => $request->input('user_email'),
+                    'superuser' => true
+                ], [], $auth, $this->app['boomcms.person.provider'], $this->app['boomcms.group.provider']
             ));
 
             $auth->login($person);
