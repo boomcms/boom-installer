@@ -48,7 +48,7 @@ class InstallerTest extends PHPUnit_Framework_TestCase
         Storage::shouldReceive('disk')
             ->andReturnSelf()
             ->shouldReceive('put')
-            ->with('boomcms.installed');
+            ->with('boomcms.installed', '');
 
         $this->installer->markInstalled();
     }

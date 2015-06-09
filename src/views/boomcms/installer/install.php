@@ -3,7 +3,6 @@
     <head>
         <title>Install BoomCMS</title>
         <meta name="robots" content="nofollow,noindex">
-        <meta name="csrf-token" content="<?= csrf_token() ?>" />
 
         <link rel="stylesheet" type="text/css" href="/vendor/boomcms/boom-core/css/cms.css" />
         <link rel="stylesheet" type="text/css" href="/vendor/boomcms/boom-installer/css/boomcms-installer.css" />
@@ -16,6 +15,8 @@
 
         <main>
             <form method='post'>
+                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+
                 <?php if ($installer->databaseNeedsInstall()): ?>
                     <fieldset>
                         <legend>Database Connection</legend>

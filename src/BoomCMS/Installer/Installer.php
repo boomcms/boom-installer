@@ -41,7 +41,7 @@ class Installer
 
     public function markInstalled()
     {
-        Storage::disk('local')->put($this->installFileName);
+        Storage::disk('local')->put($this->installFileName, '');
 
         return $this;
     }
