@@ -44,6 +44,9 @@ class ServiceProvider extends BaseServiceProvider
             $page = $this->dispatch(new \BoomCMS\Core\Commands\CreatePage($this->app['boomcms.page.provider'], $auth));
             $this->dispatch(new \BoomCMS\Core\Commands\CreatePagePrimaryUri($this->app['boomcms.page.provider'], $page, '', ''));
             $installer->markInstalled();
+
+            header("Location: /");
+            exit;
         }
     }
 
