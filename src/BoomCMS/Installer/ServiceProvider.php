@@ -4,7 +4,6 @@ namespace BoomCMS\Installer;
 
 use BoomCMS\Core\Auth;
 
-use Illuminate\Bus\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -15,12 +14,11 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function boot(Request $request, Auth\Auth $auth, Dispatcher $dispatcher)
+    public function boot(Request $request, Auth\Auth $auth)
     {
         $installer = new Installer();
 
         if ( ! $installer->isInstalled()) {
-            $dispatcher->pipeThrough('UseDatabaseTransactions');
             $this->dispatch('Illuminate\Database\Console\Migrations\InstallCommand');
             $this->dispatch('Illuminate\Database\Console\Migrations\MigrateCommand');
 
