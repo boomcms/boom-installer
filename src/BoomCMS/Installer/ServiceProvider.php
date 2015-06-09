@@ -2,27 +2,41 @@
 
 namespace BoomCMS\Installer;
 
+use BoomCMS\Core\Auth;
+
+use Illuminate\Bus\Dispatcher;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
 {
     /**
-	 * Bootstrap any application services.
-	 *
-	 * @return void
-	 */
-    public function boot()
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot(Request $request, Auth\Auth $auth, Dispatcher $dispatcher)
     {
-        // On HTTP Post request check for install data in $_POST and complete install if required.
+        $installer = new Installer();
 
-        // $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$config['user_name'], $config['user_email'], []]);
-        // $installer->install($_POST);
+        if ( ! $installer->isInstalled()) {
+            $dispatcher->pipeThrough('UseDatabaseTransactions');
+            $this->dispatch('Illuminate\Database\Console\Migrations\InstallCommand');
+            $this->dispatch('Illuminate\Database\Console\Migrations\MigrateCommand');
+
+            $person = $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$request->input('user_name'), $request->input('user_email'), []]);
+            $auth->login($person);
+
+            $page = $this->dispatch('BoomCMS\Core\Commands\CreatePage', $this->app['boomcms.page.provider'], $auth);
+            $this->dispatch('BoomCMS\Core\Commands\CreatePagePrimaryUri', $this->app['boomcms.page.provider'], $page, '', '');
+            $installer->markInstalled();
+        }
     }
 
     /**
-	 *
-	 * @return void
-	 */
+     *
+     * @return void
+     */
     public function register()
     {
         $installer = new Installer();
