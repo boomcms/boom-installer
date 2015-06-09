@@ -31,8 +31,6 @@ class ServiceProvider extends BaseServiceProvider
             require __DIR__ . '/../../install.php';
         }
 
-        $this->publishes([
-          __DIR__.'/../../../public' => public_path('vendor/boomcms/boom-installer'),
-        ], 'boomcms');
+        $this->publishes([__DIR__.'/../../../public' => public_path('vendor/boomcms/boom-installer')], 'boomcms');
     }
 }
