@@ -22,6 +22,8 @@ class ServiceProvider extends BaseServiceProvider
             $this->dispatch('Illuminate\Database\Console\Migrations\InstallCommand');
             $this->dispatch('Illuminate\Database\Console\Migrations\MigrateCommand');
 
+            $installer->saveSiteDetails($request->input('site_name'), $request->input('site_email'));
+
             $person = $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$request->input('user_name'), $request->input('user_email'), []]);
             $auth->login($person);
 
