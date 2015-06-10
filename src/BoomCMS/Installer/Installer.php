@@ -2,7 +2,7 @@
 
 namespace BoomCMS\Installer;
 
-use BoomCMS\Core\Settings\Settings;
+use BoomCMS\Core\Facades\Settings;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
