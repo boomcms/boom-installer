@@ -10,7 +10,7 @@
     ],
     "require": {
         "Laravel/Framework": "^5.0",
-	"boomcms/boom-core": "3.0.*"
+	"boomcms/boom-core": "3.*"
     },
     "autoload": {
         "psr-0": {"BoomCMS\\Installer": "src/"}
