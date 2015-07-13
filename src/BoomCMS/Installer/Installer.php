@@ -2,6 +2,8 @@
 
 namespace BoomCMS\Installer;
 
+use BoomCMS\Core\Facades\Settings;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +15,10 @@ class Installer
 
     protected $installFileName = 'boomcms.installed';
 
+    /**
+     *
+     * @return boolean
+     */
     public function databaseNeedsInstall()
     {
         try {
@@ -24,6 +30,10 @@ class Installer
         return $dbname ? false : true;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isInstalled()
     {
         return Storage::disk('local')->exists($this->installFileName);
@@ -31,12 +41,13 @@ class Installer
 
     public function markInstalled()
     {
-        Storage::disk('local')->put($this->installFileName);
+        Storage::disk('local')->put($this->installFileName, '');
+
+        return $this;
     }
 
     public function installDatabase(array $config)
     {
-
         Config::set('database.connections.mysql.host', $config['db_host']);
         Config::set('database.connections.mysql.database', $config['db_name']);
         Config::set('database.connections.mysql.username', $config['db_username']);
@@ -50,5 +61,13 @@ class Installer
 
             file_put_contents(__DIR__ . '/../../../../../../.env', $dbenv, FILE_APPEND);
         }
+    }
+
+    public function saveSiteDetails($name, $adminEmail)
+    {
+        Settings::set([
+            'site.name' => $name,
+            'site.admin.email' => $adminEmail
+        ]);
     }
 }

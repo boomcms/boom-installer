@@ -3,33 +3,48 @@
 namespace BoomCMS\Installer;
 
 use BoomCMS\Core\Auth;
+use BoomCMS\Core\Commands\CreatePerson as CreatePersonCommand;
 
-use Illuminate\Bus\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Foundation\Bus\DispatchesCommands;
 
 class ServiceProvider extends BaseServiceProvider
 {
+    use DispatchesCommands;
+
     /**
      * Bootstrap any application services.
      *
      * @return void
      */
-    public function boot(Request $request, Auth\Auth $auth, Dispatcher $dispatcher)
+    public function boot(Request $request, Auth\Auth $auth)
     {
         $installer = new Installer();
 
-        if ( ! $installer->isInstalled()) {
-            $dispatcher->pipeThrough('UseDatabaseTransactions');
-            $this->dispatch('Illuminate\Database\Console\Migrations\InstallCommand');
-            $this->dispatch('Illuminate\Database\Console\Migrations\MigrateCommand');
+        if (php_sapi_name() !== 'cli' && ! $installer->isInstalled()) {
+            if ( ! $this->app['migration.repository']->repositoryExists()) {
+                $this->app['migration.repository']->createRepository();
+            }
 
-            $person = $this->dispatch('BoomCMS\Core\Commands\CreatePerson', [$request->input('user_name'), $request->input('user_email'), []]);
+            $this->app['migrator']->run(base_path('/vendor/boomcms/boom-core/src/database/migrations'));
+            $installer->saveSiteDetails($request->input('site_name'), $request->input('site_email'));
+
+            $person = $this->dispatch(new CreatePersonCommand([
+                    'name' => $request->input('user_name'),
+                    'email' => $request->input('user_email'),
+                    'superuser' => true
+                ], [], $auth, $this->app['boomcms.person.provider'], $this->app['boomcms.group.provider']
+            ));
+
             $auth->login($person);
 
-            $page = $this->dispatch('BoomCMS\Core\Commands\CreatePage', $this->app['boomcms.page.provider'], $auth);
-            $this->dispatch('BoomCMS\Core\Commands\CreatePagePrimaryUri', $this->app['boomcms.page.provider'], $page, '', '');
+            $page = $this->dispatch(new \BoomCMS\Core\Commands\CreatePage($this->app['boomcms.page.provider'], $auth));
+            $this->dispatch(new \BoomCMS\Core\Commands\CreatePagePrimaryUri($this->app['boomcms.page.provider'], $page, '', '/'));
             $installer->markInstalled();
+
+            header("Location: /");
+            exit;
         }
     }
 
@@ -45,8 +60,6 @@ class ServiceProvider extends BaseServiceProvider
             require __DIR__ . '/../../install.php';
         }
 
-        $this->publishes([
-          __DIR__.'/../../../public' => public_path('vendor/boomcms/boom-installer'),
-        ], 'boomcms');
+        $this->publishes([__DIR__.'/../../../public' => public_path('vendor/boomcms/boom-installer')], 'boomcms');
     }
 }
