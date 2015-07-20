@@ -77,7 +77,7 @@
                     </p>
                 </fieldset>
 
-                <input type="submit" />
+                <input type="submit" value="Install Boom" />
             </form>
         </main>
     </body>
