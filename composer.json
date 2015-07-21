@@ -12,6 +12,9 @@
         "Laravel/Framework": "^5.0",
 	"boomcms/boom-core": ">=3.0"
     },
+    "require-dev": {
+        "boomcms/boom-core": "dev-master"
+    },
     "autoload": {
         "psr-0": {"BoomCMS\\Installer": "src/"}
     },
