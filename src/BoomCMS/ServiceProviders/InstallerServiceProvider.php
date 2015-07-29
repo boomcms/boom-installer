@@ -1,7 +1,8 @@
 <?php
 
-namespace BoomCMS\Installer;
+namespace BoomCMS\ServiceProviders;
 
+use BoomCMS\Installer;
 use BoomCMS\Core\Auth;
 use BoomCMS\Core\Commands\CreatePerson as CreatePersonCommand;
 
@@ -9,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 
-class ServiceProvider extends BaseServiceProvider
+class InstallerServiceProvider extends BaseServiceProvider
 {
     use DispatchesCommands;
 
@@ -20,7 +21,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot(Request $request, Auth\Auth $auth)
     {
-        $installer = new Installer();
+        $installer = new Installer\Installer();
 
         if (php_sapi_name() !== 'cli' && ! $installer->isInstalled()) {
             if ( ! $this->app['migration.repository']->repositoryExists()) {
