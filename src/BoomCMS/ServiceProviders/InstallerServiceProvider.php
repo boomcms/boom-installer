@@ -55,7 +55,7 @@ class InstallerServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $installer = new Installer();
+        $installer = new Installer\Installer();
 
         if (php_sapi_name() !== 'cli' && ! $installer->isInstalled()) {
             require __DIR__ . '/../../install.php';
