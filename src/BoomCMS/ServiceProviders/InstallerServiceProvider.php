@@ -2,13 +2,12 @@
 
 namespace BoomCMS\ServiceProviders;
 
-use BoomCMS\Installer;
 use BoomCMS\Core\Auth;
 use BoomCMS\Core\Commands\CreatePerson as CreatePersonCommand;
-
+use BoomCMS\Installer;
+use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Illuminate\Foundation\Bus\DispatchesCommands;
 
 class InstallerServiceProvider extends BaseServiceProvider
 {
@@ -23,8 +22,8 @@ class InstallerServiceProvider extends BaseServiceProvider
     {
         $installer = new Installer\Installer();
 
-        if (php_sapi_name() !== 'cli' && ! $installer->isInstalled()) {
-            if ( ! $this->app['migration.repository']->repositoryExists()) {
+        if (php_sapi_name() !== 'cli' && !$installer->isInstalled()) {
+            if (!$this->app['migration.repository']->repositoryExists()) {
                 $this->app['migration.repository']->createRepository();
             }
 
@@ -32,9 +31,9 @@ class InstallerServiceProvider extends BaseServiceProvider
             $installer->saveSiteDetails($request->input('site_name'), $request->input('site_email'));
 
             $person = $this->dispatch(new CreatePersonCommand([
-                    'name' => $request->input('user_name'),
-                    'email' => $request->input('user_email'),
-                    'superuser' => true
+                    'name'      => $request->input('user_name'),
+                    'email'     => $request->input('user_email'),
+                    'superuser' => true,
                 ], [], $auth, $this->app['boomcms.person.provider'], $this->app['boomcms.group.provider']
             ));
 
@@ -44,21 +43,20 @@ class InstallerServiceProvider extends BaseServiceProvider
             $this->dispatch(new \BoomCMS\Core\Commands\CreatePagePrimaryUri($this->app['boomcms.page.provider'], $page, '', '/'));
             $installer->markInstalled();
 
-            header("Location: /");
+            header('Location: /');
             exit;
         }
     }
 
     /**
-     *
      * @return void
      */
     public function register()
     {
         $installer = new Installer\Installer();
 
-        if (php_sapi_name() !== 'cli' && ! $installer->isInstalled()) {
-            require __DIR__ . '/../../install.php';
+        if (php_sapi_name() !== 'cli' && !$installer->isInstalled()) {
+            require __DIR__.'/../../install.php';
         }
 
         $this->publishes([__DIR__.'/../../../public' => public_path('vendor/boomcms/boom-installer')], 'boomcms');

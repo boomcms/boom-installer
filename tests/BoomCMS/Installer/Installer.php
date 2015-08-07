@@ -1,8 +1,7 @@
 <?php
 
-use BoomCMS\Installer\Installer;
 use BoomCMS\Core\Settings\Settings;
-
+use BoomCMS\Installer\Installer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -89,7 +88,7 @@ class InstallerTest extends PHPUnit_Framework_TestCase
     public function testSaveSiteDetails()
     {
         $settings = [
-            'site.name' => 'test',
+            'site.name'        => 'test',
             'site.admin.email' => 'test@test.com',
         ];
 

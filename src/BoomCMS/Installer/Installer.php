@@ -3,11 +3,10 @@
 namespace BoomCMS\Installer;
 
 use BoomCMS\Support\Facades\Settings;
-
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Installer
 {
@@ -16,8 +15,7 @@ class Installer
     protected $installFileName = 'boomcms.installed';
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function databaseNeedsInstall()
     {
@@ -31,8 +29,7 @@ class Installer
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isInstalled()
     {
@@ -55,19 +52,19 @@ class Installer
 
         if (DB::connection()->getDatabaseName()) {
             $dbenv = "\nDB_HOST={$config['db_host']}\n"
-                . "DB_DATABASE={$config['db_name']}\n"
-                . "DB_PASSWORD={$config['db_password']}\n"
-                . "DB_USERNAME={$config['db_username']}\n";
+                ."DB_DATABASE={$config['db_name']}\n"
+                ."DB_PASSWORD={$config['db_password']}\n"
+                ."DB_USERNAME={$config['db_username']}\n";
 
-            file_put_contents(__DIR__ . '/../../../../../../.env', $dbenv, FILE_APPEND);
+            file_put_contents(__DIR__.'/../../../../../../.env', $dbenv, FILE_APPEND);
         }
     }
 
     public function saveSiteDetails($name, $adminEmail)
     {
         Settings::set([
-            'site.name' => $name,
-            'site.admin.email' => $adminEmail
+            'site.name'        => $name,
+            'site.admin.email' => $adminEmail,
         ]);
     }
 }
