@@ -2,8 +2,8 @@
 
 namespace BoomCMS\ServiceProviders;
 
+use BoomCMS\Commands\CreatePerson as CreatePersonCommand;
 use BoomCMS\Core\Auth;
-use BoomCMS\Core\Commands\CreatePerson as CreatePersonCommand;
 use BoomCMS\Installer;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Http\Request;
