@@ -43,7 +43,7 @@ class InstallerServiceProvider extends BaseServiceProvider
             $this->dispatch(new Commands\CreatePagePrimaryUri($this->app['boomcms.page.provider'], $page, '', '/'));
             $installer->markInstalled();
 
-            header('Location: /');
+            header('Location: /cms/login');
             exit;
         }
     }
