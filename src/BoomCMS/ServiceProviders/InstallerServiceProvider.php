@@ -2,7 +2,7 @@
 
 namespace BoomCMS\ServiceProviders;
 
-use BoomCMS\Commands;
+use BoomCMS\Jobs;
 use BoomCMS\Core\Auth;
 use BoomCMS\Installer;
 use Illuminate\Foundation\Bus\DispatchesCommands;
@@ -30,7 +30,7 @@ class InstallerServiceProvider extends BaseServiceProvider
             $this->app['migrator']->run(base_path('/vendor/boomcms/boom-core/src/database/migrations'));
             $installer->saveSiteDetails($request->input('site_name'), $request->input('site_email'));
 
-            $person = $this->dispatch(new Commands\CreatePerson([
+            $person = $this->dispatch(new Jobs\CreatePerson([
                     'name'      => $request->input('user_name'),
                     'email'     => $request->input('user_email'),
                     'superuser' => true,
@@ -39,8 +39,8 @@ class InstallerServiceProvider extends BaseServiceProvider
 
             $auth->login($person);
 
-            $page = $this->dispatch(new Commands\CreatePage($this->app['boomcms.page.provider'], $auth));
-            $this->dispatch(new Commands\CreatePagePrimaryUri($page, '', '/'));
+            $page = $this->dispatch(new Jobs\CreatePage($this->app['boomcms.page.provider'], $auth));
+            $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', '/'));
             $installer->markInstalled();
 
             header('Location: /cms/login');
