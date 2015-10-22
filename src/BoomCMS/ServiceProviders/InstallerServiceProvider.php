@@ -2,9 +2,9 @@
 
 namespace BoomCMS\ServiceProviders;
 
-use BoomCMS\Jobs;
 use BoomCMS\Core\Auth;
 use BoomCMS\Installer;
+use BoomCMS\Jobs;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
