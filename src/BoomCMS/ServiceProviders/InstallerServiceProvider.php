@@ -34,7 +34,7 @@ class InstallerServiceProvider extends BaseServiceProvider
                     'name'      => $request->input('user_name'),
                     'email'     => $request->input('user_email'),
                     'superuser' => true,
-                ], [], $auth, $this->app['boomcms.person.provider'], $this->app['boomcms.group.provider']
+                ], []
             ));
 
             $auth->login($person);
