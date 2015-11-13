@@ -27,6 +27,10 @@ body#boomcms-install {
 	}
 
 	form {
+		fieldset {
+			margin-top: 2rem;
+		}
+
 		label {
 			margin-top: 2rem;
 		}
@@ -48,13 +52,19 @@ body#boomcms-install {
 		}
 
 		input[type=submit] {
+			border: 1px solid #bf1e2e;
 			background: #bf1e2e;
-			font-size: 1.5rem;
 			display: block;
 			margin: 2em auto;
 			color: #fff;
-			padding: 0.5em 2em;
-			line-height: 1.5rem;
+			padding: 1.5rem 5rem;
+			cursor: pointer;
+			height: auto;
+
+			&:hover, &:focus {
+				background: transparent;
+				color: #bf1e2e;
+			}
 		}
 	}
 }
