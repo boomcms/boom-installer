@@ -7,11 +7,12 @@
         <link rel="stylesheet" type="text/css" href="/vendor/boomcms/boom-core/css/cms.css" />
         <link rel="stylesheet" type="text/css" href="/vendor/boomcms/boom-installer/css/boomcms-installer.css" />
     </head>
+
     <body id="boomcms-install">
         <header role="banner">
             <img src="/vendor/boomcms/boom-core/img/logo.png" alt="BoomCMS logo" id="logo" />
             <h1>Install BoomCMS</h1>
-        </head>
+        </header>
 
         <main>
             <form method='post'>
