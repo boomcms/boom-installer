@@ -2,7 +2,6 @@
 
 namespace BoomCMS\ServiceProviders;
 
-use BoomCMS\Core\Auth;
 use BoomCMS\Installer;
 use BoomCMS\Jobs;
 use Illuminate\Foundation\Bus\DispatchesCommands;
@@ -18,7 +17,7 @@ class InstallerServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function boot(Request $request, Auth\Auth $auth)
+    public function boot(Request $request)
     {
         $installer = new Installer\Installer();
 
@@ -37,9 +36,9 @@ class InstallerServiceProvider extends BaseServiceProvider
                 ], []
             ));
 
-            $auth->login($person);
+            auth()->login($person);
 
-            $page = $this->dispatch(new Jobs\CreatePage($auth->getPerson()));
+            $page = $this->dispatch(new Jobs\CreatePage($person));
             $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', '/'));
             $installer->markInstalled();
 
