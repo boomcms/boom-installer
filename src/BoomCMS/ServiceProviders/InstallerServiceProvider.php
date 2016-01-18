@@ -42,7 +42,7 @@ class InstallerServiceProvider extends BaseServiceProvider
             $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', '/'));
             $installer->markInstalled();
 
-            header('Location: /cms/login');
+            header('Location: /boomcms/login');
             exit;
         }
     }
