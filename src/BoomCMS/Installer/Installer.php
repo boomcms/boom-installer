@@ -3,6 +3,7 @@
 namespace BoomCMS\Installer;
 
 use BoomCMS\Support\Facades\Settings;
+use BoomCMS\Support\Facades\Site;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -65,6 +66,13 @@ class Installer
         Settings::set([
             'site.name'        => $name,
             'site.admin.email' => $adminEmail,
+        ]);
+
+        Site::create([
+            'name'        => $name,
+            'admin_email' => $adminEmail,
+            'default'     => true,
+            'hostname'    => '',
         ]);
     }
 }
