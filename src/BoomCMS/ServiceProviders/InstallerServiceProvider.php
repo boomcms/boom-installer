@@ -36,6 +36,7 @@ class InstallerServiceProvider extends BaseServiceProvider
 
             $person = $this->dispatch(new Jobs\CreatePerson($email, $name));
 
+            $person->addSite($site);
             $person->setSuperuser(true);
             Person::save($person);
 
