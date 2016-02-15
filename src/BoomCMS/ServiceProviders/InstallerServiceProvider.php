@@ -33,7 +33,7 @@ class InstallerServiceProvider extends BaseServiceProvider
             $name = $request->input('user_name');
             $email = $request->input('user_email');
 
-            $person = $this->dispatch(new Jobs\CreatePerson($name, $email));
+            $person = $this->dispatch(new Jobs\CreatePerson($email, $name));
 
             $person->setSuperuser(true);
             Person::save($person);
