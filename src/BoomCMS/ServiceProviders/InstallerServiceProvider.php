@@ -41,7 +41,7 @@ class InstallerServiceProvider extends BaseServiceProvider
 
             auth()->login($person);
 
-            $page = $this->dispatch(new Jobs\CreatePage($site, $person));
+            $page = $this->dispatch(new Jobs\CreatePage($person, $site));
             $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', '/'));
             $installer->markInstalled();
 
