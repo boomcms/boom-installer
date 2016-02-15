@@ -68,7 +68,7 @@ class Installer
             'site.admin.email' => $adminEmail,
         ]);
 
-        Site::create([
+        return Site::create([
             'name'        => $name,
             'admin_email' => $adminEmail,
             'default'     => true,
