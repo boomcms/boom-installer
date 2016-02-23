@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "Laravel/Framework": "5.1.*",
+        "laravel/framework": "5.*",
 	"boomcms/boom-core": ">=3.0"
     },
     "require-dev": {
