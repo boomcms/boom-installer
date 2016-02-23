@@ -5,13 +5,13 @@ namespace BoomCMS\ServiceProviders;
 use BoomCMS\Installer;
 use BoomCMS\Jobs;
 use BoomCMS\Support\Facades\Person;
-use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class InstallerServiceProvider extends BaseServiceProvider
 {
-    use DispatchesCommands;
+    use DispatchesJobs;
 
     /**
      * Bootstrap any application services.
