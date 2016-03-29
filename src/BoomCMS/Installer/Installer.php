@@ -21,12 +21,12 @@ class Installer
     public function databaseNeedsInstall()
     {
         try {
-            $dbname = DB::connection()->getDatabaseName();
+            DB::connection()->reconnect();
         } catch (\PDOException $e) {
             return true;
         }
 
-        return $dbname ? false : true;
+        return false;
     }
 
     /**
