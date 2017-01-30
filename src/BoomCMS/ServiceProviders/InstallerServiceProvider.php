@@ -4,6 +4,7 @@ namespace BoomCMS\ServiceProviders;
 
 use BoomCMS\Installer;
 use BoomCMS\Jobs;
+use BoomCMS\Routing\Router;
 use BoomCMS\Support\Facades\Person;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class InstallerServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function boot(Request $request)
+    public function boot(Request $request, Router $router)
     {
         $installer = new Installer\Installer();
 
@@ -31,6 +32,8 @@ class InstallerServiceProvider extends BaseServiceProvider
 
             $site = $installer->saveSiteDetails($request->input('site_name'), $request->input('site_email'));
 
+            $router->setActiveSite($site);
+
             $name = $request->input('user_name');
             $email = $request->input('user_email');
 
@@ -42,7 +45,7 @@ class InstallerServiceProvider extends BaseServiceProvider
 
             auth()->login($person);
 
-            $page = $this->dispatch(new Jobs\CreatePage($person, $site));
+            $page = $this->dispatch(new Jobs\CreatePage());
             $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', '/'));
             $installer->markInstalled();
 
