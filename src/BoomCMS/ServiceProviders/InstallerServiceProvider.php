@@ -46,7 +46,7 @@ class InstallerServiceProvider extends BaseServiceProvider
             auth()->login($person);
 
             $page = $this->dispatch(new Jobs\CreatePage());
-            $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', '/'));
+            $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', ''));
             $installer->markInstalled();
 
             header('Location: /boomcms/login');
