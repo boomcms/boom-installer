@@ -5,6 +5,7 @@ namespace BoomCMS\ServiceProviders;
 use BoomCMS\Installer;
 use BoomCMS\Jobs;
 use BoomCMS\Routing\Router;
+use BoomCMS\Support\Facades\Page as PageFacade;
 use BoomCMS\Support\Facades\Person;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
@@ -46,6 +47,11 @@ class InstallerServiceProvider extends BaseServiceProvider
             auth()->login($person);
 
             $page = $this->dispatch(new Jobs\CreatePage());
+
+            // Make the page visible so that it can be seen by the user after logging in
+            $page->setVisibleAtAnyTime(true);
+            PageFacade::save($page);
+
             $this->dispatch(new Jobs\CreatePagePrimaryUri($page, '', ''));
             $installer->markInstalled();
 
